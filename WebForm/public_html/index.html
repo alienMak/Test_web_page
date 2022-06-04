@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+    <head>
+        <title>Project</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet"
+              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="http://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js"></script>
+    </head>
+    <style>
+        h2{
+            font-family: Calibri;
+            font-size: 25pt;
+            font-style: normal;
+            font-weight: bold;
+            color:SlateBlue;
+            text-align: center;
+            text-decoration: underline
+        }
+        .container{
+            font-family: Calibri;
+            color:white;
+            font-size: 11pt;
+            font-style: normal;
+            font-weight: bold;
+            text-align:;
+            background-image: url("https://i.pinimg.com/originals/c7/18/fa/c718fa86394f9446dfe870e4c86346a0.png");
+            background-repeat: no-repeat;
+             background-size: cover;
+            border-collapse: collapse;
+            border: 2px solid navy
+        }
+        
+    </style>
+    <body>
+        <h2>Student Registration Form</h2>
+        <div class="container">
+
+            <form id="empForm" method="post">
+                <div class="form-group">
+                    <span><label for="empId">Student ID:</label> <label id="empIdMsg">
+                        </label></span>
+                    <input type="text" class="form-control" name="empId" id="empId"
+                           placeholder="Enter Student ID" required>
+                </div>
+                <div class="form-group">
+                    <label for="empName">Student Name:</label>
+                    <input type="text" class="form-control" id="empName"
+                           placeholder="Enter Student Name" name="empName">
+                </div>
+                <div class="form-group">
+                    <label for="empEmail">Student Email:</label>
+                    <input type="email" class="form-control" id="empEmail"
+                           placeholder="Enter Student Email" name="empEmail">
+                </div>
+                <div class="form-group">
+                    <label for="empPhno">Phone Number:</label>
+                    <input type="phno" class="form-control" id="empPhno"
+                           placeholder="Enter Student Phone Number" name="empPhno">
+                </div>
+                <input type="button" class="btn btn-primary" id="empSave" value="Save"
+                       onclick="saveEmployee();">
+            </form>
+        </div>
+        <script>
+            $("#empId").focus();
+            function validateAndGetFormData() {
+                var empIdVar = $("#empId").val();
+                if (empIdVar === "") {
+                    alert("Employee ID Required Value");
+                    $("#empId").focus();
+                    return "";
+                }
+                var empNameVar = $("#empName").val();
+                if (empNameVar === "") {
+                    alert("Employee Name is Required Value");
+                    $("#empName").focus();
+                    return "";
+                }
+                var empEmailVar = $("#empEmail").val();
+                if (empEmailVar === "") {
+                    alert("Employee Email is Required Value");
+                    $("#empEmail").focus();
+                    return "";
+                }
+                var empPhnoVar = $("#empPhno").val();
+                if (empPhnoVar === "") {
+                    alert("Phone Number is Required Value");
+                    $("#empPhno").focus();
+                    return "";
+                }
+                var jsonStrObj = {
+                    empId: empIdVar,
+                    empName: empNameVar,
+                    empEmail: empEmailVar,
+                    empPhno: empPhnoVar,
+                };
+                return JSON.stringify(jsonStrObj);
+            }
+            function resetForm() {
+                $("#empId").val("")
+                $("#empName").val("");
+                $("#empEmail").val("");
+                $("#empPhno").val("");
+                $("#empId").focus();
+            }
+            function saveEmployee() {
+                var jsonStr = validateAndGetFormData();
+                if (jsonStr === "") {
+                    return;
+                }
+                var putReqStr = createPUTRequest("90938955|-31949289433277388|90940673",
+                        jsonStr, "STUDENT", "STUDENT-REL");
+                alert(putReqStr);
+                jQuery.ajaxSetup({async: false});
+                var resultObj = executeCommandAtGivenBaseUrl(putReqStr,
+                        "http://api.login2explore.com:5577", "/api/iml");
+                alert(JSON.stringify(resultObj));
+                jQuery.ajaxSetup({async: true});
+                resetForm();
+            }
+
+        </script>
+    </body>
+</html>
